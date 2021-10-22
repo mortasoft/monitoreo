@@ -1,0 +1,119 @@
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ titulo }}</title>
+
+    <!-- Font Awesome v5.15 Actualizado automaticamente -->
+    <script src="https://kit.fontawesome.com/397e6b1f85.js" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap 4.5.3 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+    <!-- Datatables 1.10.24 -->
+    <link href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
+
+    <!-- JQuery 3.6.0 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- Toastr Notifications -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+</head>
+
+<body class="nav-sm">
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col menu_fixed">
+                <div class="left_col scroll-view">
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a href="/" class="site_title">
+                            <img src="{{ url_for('static', filename='images/CGR-logo.png') }}" alt="" style="height: 50%;">
+                            <span>Monitoreo</span>
+                        </a>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <!-- sidebar menu -->
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section">
+                            <ul class="nav side-menu">
+                                <li>
+                                    <a href="{{ url_for('home') }}">
+                                        <i class="fa fa-home"></i> Inicio
+                                        <span class="fa fa-chevron-down"></span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="{{ url_for('sitios') }}">
+                                        <i class="fa fa-sitemap"></i> Sitios
+                                        <span class="fa fa-chevron-down"></span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="{{ url_for('registros') }}">
+                                        <i class="fa fa-box"></i> Registro
+                                        <span class="fa fa-chevron-down"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- top navigation -->
+            <div class="top_nav">
+                <div class="nav_menu">
+                    <div class="nav toggle">
+                        <a id="menu_toggle">
+                            <i class="fa fa-bars" style="color: #5E6974 !important"></i>
+                        </a>
+                    </div>
+                    <nav class="nav navbar-nav">
+                        <ul class=" navbar-right">
+                            <li class="nav-item dropdown open" style="padding-left: 15px;">
+                                {{ date }}
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- /top navigation -->
+
+            <!-- page content -->
+            <div id="derecha" class="right_col" role="main">
+                {% block content %}
+
+                {% endblock %}
+            </div>
+            <!-- /page content -->
+
+            <!-- footer content -->
+            <footer>
+                <div class="pull-right">
+                    División de Fiscalización Operativa y Evaluativa DFOE, Contraloria General de la República, Sitio
+                    actualizado a 07/06/2021, Prototipo V0.1
+                </div>
+                <div class="clearfix"></div>
+            </footer>
+            <!-- /footer content -->
+        </div>
+    </div>
+
+    <!-- Custom Theme Scripts -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+</body>
+
+</html>

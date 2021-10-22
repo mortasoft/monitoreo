@@ -1,0 +1,27 @@
+{% extends "plantilla.html" %} {% block titulo %}
+<h2 class="bold">Página Principal</h2>
+{% endblock %} 
+
+{% block content %}
+
+<table id="table" class="table table-hover table-sm">
+    <thead>
+        <tr>
+            {% for row in columnas %}
+            <th class="color-cgr">{{ row }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for fila in datos %}
+        <tr>
+            {% for celda in fila %}
+              <td>{{ celda }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

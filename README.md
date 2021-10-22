@@ -1,2 +1,2 @@
 # monitoreo
- Aplicación en Python para monitoreo de Servidorees
+ Aplicación en Python para monitoreo de Servidores
