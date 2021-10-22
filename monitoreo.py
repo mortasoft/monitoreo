@@ -1,15 +1,16 @@
-from multiprocessing import pool
-from os import stat
+import os
 import requests,time
 import sqlite3
 from sqlite3 import Error
 from concurrent.futures import ThreadPoolExecutor
 
 TIMEOUT_TIME = 5
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB = os.path.join(BASE_DIR, "monitoreo_db.db")
 
 def crear_db():
     try:
-        con = sqlite3.connect("monitoreo_db.db")
+        con = sqlite3.connect(DB)
         cursor = con.cursor()
         cursor.execute("CREATE TABLE sitios(url text PRIMARY KEY, description text, request_type text, monitoring_interval INTEGER,enabled INTEGER)")
         cursor.execute("CREATE TABLE registro(id INTEGER PRIMARY KEY AUTOINCREMENT, url text NOT NULL, start_time text, end_time text, elapsed text,latency INTEGER, status INTEGER, result text)")
@@ -20,7 +21,7 @@ def crear_db():
 
 def crear_sitio(url,descripcion,intervalo,tipo):
     try:
-        con = sqlite3.connect("monitoreo_db.db")
+        con = sqlite3.connect(DB)
         cursor = con.cursor()
         cursor.execute('''insert into sitios (url,description,monitoring_interval,request_type,enabled) VALUES (?,?,?,?,1)''', (url,descripcion,intervalo,tipo))
         con.commit()
@@ -31,7 +32,7 @@ def crear_sitio(url,descripcion,intervalo,tipo):
 
 def crear_log(url,start_time,end_time,elapsed,latency,status,resultado):
     try:
-        con = sqlite3.connect("monitoreo_db.db")
+        con = sqlite3.connect(DB)
         cursor = con.cursor()
         cursor.execute('''insert into registro (url,start_time,end_time,elapsed,latency,status,result) VALUES (?,?,?,?,?,?,?)''', (url,start_time,end_time,elapsed,latency,status,resultado))
         con.commit()
@@ -42,7 +43,7 @@ def crear_log(url,start_time,end_time,elapsed,latency,status,resultado):
 
 def ver_sitios():
     try:
-        con = sqlite3.connect("monitoreo_db.db")
+        con = sqlite3.connect(DB)
         cursor = con.cursor()
         cursor.execute('select * from sitios')
         filas = cursor.fetchall()
@@ -57,7 +58,7 @@ def iniciar_proceso():
     datos = []
 
     try:
-        con = sqlite3.connect("monitoreo_db.db")
+        con = sqlite3.connect(DB)
         cursor = con.cursor()
         cursor.execute('select * from sitios where enabled = 1')
         filas = cursor.fetchall()
