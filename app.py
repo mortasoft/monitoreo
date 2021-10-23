@@ -44,7 +44,7 @@ def obtener_registros():
         salida = []
         con = sqlite3.connect("monitoreo_db.db")
         cursor = con.cursor()
-        cursor.execute('select * from registro order by id desc')
+        cursor.execute('select * from registro order by id desc LIMIT 1000')
         filas = cursor.fetchall()
         return filas
     except Error as e:
