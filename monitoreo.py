@@ -41,18 +41,6 @@ def crear_log(url,start_time,end_time,elapsed,latency,status,resultado):
     except Error as e:
         print(e)
 
-def ver_sitios():
-    try:
-        con = sqlite3.connect(DB)
-        cursor = con.cursor()
-        cursor.execute('select * from sitios')
-        filas = cursor.fetchall()
-        for fila in filas:
-            print(fila)
-        con.close()
-    except Error as e:
-        print(e)
-
 def iniciar_proceso():
 
     datos = []
