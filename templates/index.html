@@ -108,7 +108,15 @@
             }
 
         );
-        var table2 = $('#table2').DataTable();
+
+        var table2 = $('#table2').DataTable(
+            {
+                "oSearch": {
+                    "sSearch": date.toISOString().split('T')[0]
+                }
+            }
+        );
+
         table.buttons().container().appendTo('.dataTables_filter');
         table2.buttons().container().appendTo('.dataTables_filter');
 

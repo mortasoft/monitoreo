@@ -117,12 +117,10 @@ def monitorear(args):
         start_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))
         end_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end_time))
         crear_log(url,str(start_time),str(end_time),str(elapsed),408,_parse_result_code(408))
-    except requests.exceptions.NewConnectionError:
-        end_time = time.time()
-        elapsed = end_time - start_time
-        start_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))
-        end_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end_time))
-        crear_log(url,str(start_time),str(end_time),str(elapsed),408,_parse_result_code(408))
+    except requests.exceptions.ConnectionError:
+        timestamp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        print("No hay conexion a internet",timestamp)
+
     except requests.exceptions.RequestException as e:
         end_time = time.time()
         elapsed = end_time - start_time
@@ -130,6 +128,9 @@ def monitorear(args):
         end_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end_time))
         latency = request.elapsed.microseconds/1000
         crear_log(url,str(start_time),str(end_time),str(elapsed),latency,408,_parse_result_code(408))
+    
+    except Exception as e:
+        print(e)
 
     time.sleep(intervalo)
     monitorear(args)
@@ -144,12 +145,4 @@ def _parse_result_code(code):
         return "error"
 
 if __name__ == '__main__':
-
-    #crear_sitio("http://192.168.1.170","Sitio de Pruebas Apache2",60,"get")
-    #crear_sitio("https://192.168.1.171","Sitio de Pruebas Apache2",60,"get")
     iniciar_proceso()
-    # request = requests.get("http://192.168.1.170", timeout=5)
-    # print(request.elapsed.microseconds)
-    # print(request.elapsed)
-    # print(request.elapsed.seconds)
-    # print(request.elapsed.microseconds/1000)
