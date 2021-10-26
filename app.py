@@ -10,8 +10,8 @@ def home():
     date = datetime.datetime.now()
     datos_uptime = obtener_datos_uptime()
     datos_latencia = obtener_datos_latency()
-    columnas = ["Sitio", "Fecha", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10",
-                "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "00", "Total"]
+    columnas = ["Sitio", "Fecha", "00","01", "02", "03", "04", "05", "06", "07", "08", "09", "10",
+                "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "Total"]
     return render_template('index.html', date=date, datos=datos_uptime, columnas=columnas, datos2=datos_latencia)
 
 
