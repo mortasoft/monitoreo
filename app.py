@@ -87,6 +87,7 @@ def obtener_datos_uptime(fecha=None):
                 ifnull((ROUND(sum(case WHEN strftime('%H', start_time)='00' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='00' THEN 1.0 ELSE 0 END),4) * 100)|| '%','-') as '00',
                 ifnull(ROUND((SUM(case when status=200 then 1 ELSE 0.0 END) / COUNT(status)) * 100.0,2) || '%' ,'-') as total
                 FROM registro r join sitios s on r.url=s.url
+                where s.enabled = 1
                 GROUP BY description, strftime('%Y-%m-%d', start_time)
 				order by 1,2;
                 ''')
