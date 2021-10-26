@@ -4,27 +4,32 @@ import datetime
 from sqlite3 import Error
 app = Flask(__name__)
 
+
 @app.route('/')
 def home():
     date = datetime.datetime.now()
     datos_uptime = obtener_datos_uptime()
     datos_latencia = obtener_datos_latency()
-    columnas = ["Sitio","Fecha", "01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","00","Total"]
-    return render_template('index.html', date = date, datos = datos_uptime, columnas = columnas, datos2= datos_latencia)
+    columnas = ["Sitio", "Fecha", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10",
+                "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "00", "Total"]
+    return render_template('index.html', date=date, datos=datos_uptime, columnas=columnas, datos2=datos_latencia)
+
 
 @app.route('/sitios')
 def sitios():
     date = datetime.datetime.now()
     datos = obtener_sitios()
-    columnas = ["Url","Descripción", "Tipo_Request", "Intervalo", "Activo"]
-    return render_template('sitios.html', date = date, datos = datos, columnas = columnas)
+    columnas = ["Url", "Descripción", "Tipo_Request", "Intervalo", "Activo"]
+    return render_template('sitios.html', date=date, datos=datos, columnas=columnas)
+
 
 @app.route('/registros')
 def registros():
     date = datetime.datetime.now()
     datos = obtener_registros()
-    columnas = ["Id","Url", "Hora Inicio", "Hora Fin", "Transcurrido","Latencia","Status","Resultado"]
-    return render_template('registros.html', date = date, datos = datos, columnas = columnas)
+    columnas = ["Id", "Url", "Hora Inicio", "Hora Fin",
+                "Transcurrido", "Latencia", "Status", "Resultado"]
+    return render_template('registros.html', date=date, datos=datos, columnas=columnas)
 
 
 def obtener_sitios():
@@ -61,6 +66,7 @@ def obtener_datos_uptime(fecha=None):
                 SELECT
                 s.description as url, 
                 strftime('%Y-%m-%d', start_time) as fecha,
+                ifnull((ROUND(sum(case WHEN strftime('%H', start_time)='00' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='00' THEN 1.0 ELSE 0 END),4) * 100)|| '%','-') as '00',
                 ifnull((ROUND(sum(case WHEN strftime('%H', start_time)='01' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='01' THEN 1.0 ELSE 0 END),4) * 100)|| '%','-') as '01',
                 ifnull((ROUND(sum(case WHEN strftime('%H', start_time)='02' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='02' THEN 1.0 ELSE 0 END),4) * 100)|| '%','-') as '02',
                 ifnull((ROUND(sum(case WHEN strftime('%H', start_time)='03' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='03' THEN 1.0 ELSE 0 END),4) * 100)|| '%','-') as '03',
@@ -84,7 +90,6 @@ def obtener_datos_uptime(fecha=None):
                 ifnull((ROUND(sum(case WHEN strftime('%H', start_time)='21' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='21' THEN 1.0 ELSE 0 END),4) * 100)|| '%','-') as '21',
                 ifnull((ROUND(sum(case WHEN strftime('%H', start_time)='22' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='22' THEN 1.0 ELSE 0 END),4) * 100)|| '%','-') as '22',
                 ifnull((ROUND(sum(case WHEN strftime('%H', start_time)='23' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='23' THEN 1.0 ELSE 0 END),4) * 100)|| '%','-') as '23',
-                ifnull((ROUND(sum(case WHEN strftime('%H', start_time)='00' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='00' THEN 1.0 ELSE 0 END),4) * 100)|| '%','-') as '00',
                 ifnull(ROUND((SUM(case when status=200 then 1 ELSE 0.0 END) / COUNT(status)) * 100.0,2) || '%' ,'-') as total
                 FROM registro r join sitios s on r.url=s.url
                 where s.enabled = 1
@@ -96,6 +101,7 @@ def obtener_datos_uptime(fecha=None):
                 SELECT
                 url, 
                 strftime('%Y-%m-%d', start_time) as fecha,
+                ROUND(sum(case WHEN strftime('%H', start_time)='00' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='00' THEN 1.0 ELSE 0 END),5) * 100 as '00',
                 ROUND(sum(case WHEN strftime('%H', start_time)='01' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='01' THEN 1.0 ELSE 0 END),5) * 100 as '01',
                 ROUND(sum(case WHEN strftime('%H', start_time)='02' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='02' THEN 1.0 ELSE 0 END),5) * 100 as '02',
                 ROUND(sum(case WHEN strftime('%H', start_time)='03' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='03' THEN 1.0 ELSE 0 END),5) * 100 as '03',
@@ -118,8 +124,7 @@ def obtener_datos_uptime(fecha=None):
                 ROUND(sum(case WHEN strftime('%H', start_time)='20' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='20' THEN 1.0 ELSE 0 END),5) * 100 as '20',
                 ROUND(sum(case WHEN strftime('%H', start_time)='21' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='21' THEN 1.0 ELSE 0 END),5) * 100 as '21',
                 ROUND(sum(case WHEN strftime('%H', start_time)='22' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='22' THEN 1.0 ELSE 0 END),5) * 100 as '22',
-                ROUND(sum(case WHEN strftime('%H', start_time)='23' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='23' THEN 1.0 ELSE 0 END),5) * 100 as '23',
-                ROUND(sum(case WHEN strftime('%H', start_time)='00' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='00' THEN 1.0 ELSE 0 END),5) * 100 as '00'
+                ROUND(sum(case WHEN strftime('%H', start_time)='23' and status = 200 THEN 1.0 ELSE 0 END) / sum(case WHEN strftime('%H', start_time)='23' THEN 1.0 ELSE 0 END),5) * 100 as '23'
                 FROM registro
                 where url = 'https://192.168.1.171'
                 GROUP BY url, strftime('%Y-%m-%d', start_time);
@@ -128,6 +133,7 @@ def obtener_datos_uptime(fecha=None):
         return filas
     except Error as e:
         print(e)
+
 
 def obtener_datos_latency(fecha=None):
     try:
@@ -138,6 +144,7 @@ def obtener_datos_latency(fecha=None):
             cursor.execute('''
                 SELECT s.description, 
                 strftime('%Y-%m-%d', start_time) as fecha,
+                ifnull((ROUND(AVG(case WHEN strftime('%H', start_time)='00' THEN latency END),2)),'-') as '00',
                 ifnull((ROUND(AVG(case WHEN strftime('%H', start_time)='01' THEN latency END),2)),'-') as '01',
                 ifnull((ROUND(AVG(case WHEN strftime('%H', start_time)='02' THEN latency END),2)),'-') as '02',
                 ifnull((ROUND(AVG(case WHEN strftime('%H', start_time)='03' THEN latency END),2)),'-') as '03',
@@ -161,7 +168,6 @@ def obtener_datos_latency(fecha=None):
                 ifnull((ROUND(AVG(case WHEN strftime('%H', start_time)='21' THEN latency END),2)),'-') as '21',
                 ifnull((ROUND(AVG(case WHEN strftime('%H', start_time)='22' THEN latency END),2)),'-') as '22',
                 ifnull((ROUND(AVG(case WHEN strftime('%H', start_time)='23' THEN latency END),2)),'-') as '23',
-                ifnull((ROUND(AVG(case WHEN strftime('%H', start_time)='00' THEN latency END),2)),'-') as '00',
                 ifnull((ROUND(AVG(latency),2)),'-') as 'Total'
                 FROM registro r join sitios s on r.url=s.url
                 GROUP BY r.url, strftime('%Y-%m-%d', start_time);
@@ -203,5 +209,6 @@ def obtener_datos_latency(fecha=None):
     except Error as e:
         print(e)
 
+
 if __name__ == '__main__':
-   app.run(debug = True)
+    app.run(debug=True)
