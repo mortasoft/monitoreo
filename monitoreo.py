@@ -116,7 +116,7 @@ def monitorear(args):
                 '%Y-%m-%d %H:%M:%S', time.localtime(start_time))
             end_time = time.strftime(
                 '%Y-%m-%d %H:%M:%S', time.localtime(end_time))
-            latency = -1
+            latency = 9999
             crear_log(url, str(start_time), str(end_time), str(
                 elapsed), latency, 408, _parse_result_code(408))
         except requests.exceptions.TooManyRedirects:

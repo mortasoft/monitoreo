@@ -15,6 +15,11 @@ def home():
     return render_template('index.html', date=date, datos=datos_uptime, columnas=columnas, datos2=datos_latencia)
 
 
+@app.route('/calendar')
+def calendar():
+    return render_template("calendar.html")
+
+
 @app.route('/sitios')
 def sitios():
     date = datetime.datetime.now()
