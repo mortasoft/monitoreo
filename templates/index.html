@@ -85,6 +85,29 @@
 
 </div>
 
+<div class="row">
+
+    <div class="col-md-12 col-sm-4 ">
+        <div class="x_panel tile">
+            <div class="x_title">
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h2 class="bold">Disponibilidad Mensual</h2>
+                    <select class="d-none d-sm-inline-block shadow-sm form-select" aria-label="Default select example">
+                        <option selected>Mordor - Synology NAS</option>
+                        <option value="1">Servidor CGR Desarrollo</option>
+                        <option value="2">Servidor CGR Forms</option>
+                        <option value="3">Servidor CGR Producción</option>
+                      </select>
+                </div>
+            </div>
+            <div class="x_content">
+                <div id='myChart'></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 <!-- Datatables -->
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
@@ -121,6 +144,99 @@
         table2.buttons().container().appendTo('.dataTables_filter');
 
     });
+
+    var myConfig = {
+        plot: {
+            tooltip: { // Use this object to to configure the tooltips.
+                text: '%v <br>%data-day',
+                placement: "vertical",
+                bold: true,
+
+            },
+
+        },
+        type: 'calendar',
+        options: {
+            year: {
+                text: '2021',
+                visible: true
+            },
+            startMonth: 1,
+            endMonth: 12,
+            palette: ['#FF5733', '#00a000'],
+            month: {
+                values: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                item: {
+                    fontColor: 'gray',
+                    fontSize: 9
+                },
+            },
+            weekday: {
+                values: ['D', 'L', 'K', 'M', 'J', 'F', 'S'],
+                item: {
+                    fontColor: 'black',
+                    fontSize: 9
+                }
+            },
+
+            day: { // Configure the styling by day.
+                items: {
+                    'd-2021-10-26': {
+                        backgroundColor: 'orange',
+                    },
+                    'd-2021-10-25': {
+                        backgroundColor: 'orange',
+                    },
+                    'd-2021-10-12': {
+                        backgroundColor: 'red',                    }
+                },
+            },
+
+            values: [
+                ['2021-10-01', 100],
+                ['2021-10-02', 100],
+                ['2021-10-03', 100],
+                ['2021-10-04', 100],
+                ['2021-10-05', 100],
+                ['2021-10-06', 100],
+                ['2021-10-07', 100],
+                ['2021-10-08', 100],
+                ['2021-10-09', 100],
+                ['2021-10-10', 100],
+                ['2021-10-11', 100],
+                ['2021-10-12', 48],
+                ['2021-10-13', 100],
+                ['2021-10-14', 100],
+                ['2021-10-15', 100],
+                ['2021-10-16', 100],
+                ['2021-10-17', 100],
+                ['2021-10-18', 100],
+                ['2021-10-19', 100],
+                ['2021-10-20', 100],
+                ['2021-10-21', 100],
+                ['2021-10-22', 100],
+                ['2021-10-23', 100],
+                ['2021-10-24', 100],
+                ['2021-10-25', 95],
+                ['2021-10-26', 92],
+            ]
+        },
+        plotarea: {
+            marginTop: '15%',
+            marginBottom: '55%',
+
+        }
+    };
+
+    zingchart.loadModules('calendar', function () {
+        zingchart.render({
+            id: 'myChart',
+            data: myConfig,
+            height: 400,
+            width: '100%'
+        });
+    });
+
 </script>
 
 {% endblock %}
